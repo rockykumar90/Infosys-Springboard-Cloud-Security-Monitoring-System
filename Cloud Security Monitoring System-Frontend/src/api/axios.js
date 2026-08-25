@@ -7,7 +7,7 @@ import axios from "axios";
 ===================================================== */
 
 const API = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || "http://localhost:8080/api",
+  baseURL: import.meta.env.VITE_API_URL || "https://infosys-springboard-cloud-security.onrender.com/api",
 
   headers: {
     "Content-Type": "application/json",
