@@ -79,6 +79,12 @@
             <scope>runtime</scope>
         </dependency>
 
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+
         <!-- ===================================================== -->
         <!-- JWT -->
         <!-- ===================================================== -->
@@ -243,6 +249,13 @@
                     <source>${java.version}</source>
 
                     <target>${java.version}</target>
+
+                    <annotationProcessorPaths>
+                        <path>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                        </path>
+                    </annotationProcessorPaths>
 
                 </configuration>
 
