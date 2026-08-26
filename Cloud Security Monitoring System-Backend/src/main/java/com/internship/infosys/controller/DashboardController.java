@@ -10,7 +10,6 @@ import com.internship.infosys.service.DashboardService;
 
 @RestController
 @RequestMapping("/api/dashboard")
-@CrossOrigin(origins = "http://localhost:5173")
 public class DashboardController {
 
     @Autowired

@@ -14,7 +14,6 @@ import com.internship.infosys.service.AssetService;
 
 @RestController
 @RequestMapping("/api/assets")
-@CrossOrigin(origins = "http://localhost:5173")
 public class AssetController {
 
     @Autowired
