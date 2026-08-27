@@ -203,139 +203,90 @@
    KPI CARDS
 ========================================================= */
 
+/* =========================================================
+   KPI CARDS
+========================================================= */
+
 .asset-cards {
     display: grid;
-
-    grid-template-columns:
-        repeat(4, minmax(0, 1fr));
-
-    gap: 18px;
-
-    margin-bottom: 28px;
+    grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+    gap: 16px;
+    margin-bottom: 24px;
 }
 
 .asset-card {
     position: relative;
-
-    min-height: 135px;
-
     display: flex;
-
     align-items: center;
-
-    gap: 18px;
-
-    padding: 22px;
-
-    background:
-        linear-gradient(
-            145deg,
-            rgba(30, 41, 59, 0.94),
-            rgba(15, 23, 42, 0.98)
-        );
-
-    border: 1px solid var(--border);
-
-    border-radius: var(--radius);
-
-    box-shadow: var(--shadow);
-
+    gap: 16px;
+    padding: 18px 20px;
+    background: linear-gradient(145deg, rgba(30, 41, 59, 0.75), rgba(15, 23, 42, 0.95));
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 14px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
     overflow: hidden;
-
-    transition:
-        transform var(--transition),
-        box-shadow var(--transition),
-        border-color var(--transition);
+    transition: all 0.25s ease;
 }
 
 .asset-card:hover {
-    box-shadow: var(--shadow-lg);
-
-    border-color:
-        rgba(96, 165, 250, 0.25);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
+    border-color: rgba(59, 130, 246, 0.3);
 }
 
-.asset-card h3 {
-    margin: 0 0 6px;
-
-    color: var(--text-secondary);
-
-    font-size: 13px;
-
-    font-weight: 600;
-}
-
-.asset-card h2 {
-    margin: 0;
-
-    color: var(--text);
-
-    font-size: 30px;
-
-    font-weight: 800;
-}
-
-/* =========================================================
-   KPI ICON
-========================================================= */
-
-.card-icon {
-    width: 58px;
-
-    height: 58px;
-
+.card-icon-box {
+    width: 48px;
+    height: 48px;
     flex-shrink: 0;
-
     display: flex;
-
     align-items: center;
-
     justify-content: center;
-
-    border-radius: 15px;
-
+    border-radius: 12px;
     color: #ffffff;
-
-    font-size: 24px;
-
-    box-shadow:
-        0 10px 20px rgba(0, 0, 0, 0.22);
+    font-size: 20px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.25);
 }
 
-.card-icon.blue {
-    background:
-        linear-gradient(
-            135deg,
-            #3b82f6,
-            #2563eb
-        );
+.card-icon-box svg {
+    width: 22px;
+    height: 22px;
 }
 
-.card-icon.green {
-    background:
-        linear-gradient(
-            135deg,
-            #22c55e,
-            #16a34a
-        );
+.card-icon-box.blue {
+    background: linear-gradient(135deg, #3b82f6, #1d4ed8);
 }
 
-.card-icon.orange {
-    background:
-        linear-gradient(
-            135deg,
-            #f59e0b,
-            #d97706
-        );
+.card-icon-box.green {
+    background: linear-gradient(135deg, #22c55e, #15803d);
 }
 
-.card-icon.teal {
-    background:
-        linear-gradient(
-            135deg,
-            #14b8a6,
-            #0f766e
-        );
+.card-icon-box.orange {
+    background: linear-gradient(135deg, #f59e0b, #b45309);
+}
+
+.card-icon-box.teal {
+    background: linear-gradient(135deg, #14b8a6, #0f766e);
+}
+
+.card-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.card-info h3 {
+    margin: 0 0 4px;
+    color: #94a3b8;
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.3px;
+}
+
+.card-info h2 {
+    margin: 0;
+    color: #f8fafc;
+    font-size: 26px;
+    font-weight: 700;
+    line-height: 1.1;
 }
 
 /* =========================================================

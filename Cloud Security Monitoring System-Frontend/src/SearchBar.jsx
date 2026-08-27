@@ -120,18 +120,21 @@ export default function SearchBar({
         style={{
           display: "flex",
           alignItems: "center",
-          background: "#212529",
-          border: "1px solid #495057",
+          background: "rgba(15, 23, 42, 0.75)",
+          border: "1px solid rgba(255, 255, 255, 0.12)",
           borderRadius: "30px",
-          padding: "6px 12px",
+          padding: "4px 14px",
+          transition: "all 0.2s ease",
         }}
       >
         <FaSearch
           onClick={handleSearch}
           style={{
-            color: "#fff",
+            color: "#94a3b8",
             cursor: "pointer",
-            fontSize: "15px",
+            fontSize: "14px",
+            marginRight: "8px",
+            flexShrink: 0,
           }}
         />
 
@@ -150,9 +153,10 @@ export default function SearchBar({
             background: "transparent",
             border: "none",
             outline: "none",
-            color: "#fff",
-            padding: "8px 10px",
-            fontSize: "15px",
+            color: "#f8fafc",
+            padding: "6px 4px",
+            fontSize: "13px",
+            minWidth: 0,
           }}
         />
 
@@ -167,10 +171,13 @@ export default function SearchBar({
               background: "transparent",
               border: "none",
               cursor: "pointer",
-              color: "#fff",
+              color: "#94a3b8",
+              padding: "2px",
+              display: "flex",
+              alignItems: "center",
             }}
           >
-            <FaTimes />
+            <FaTimes style={{ fontSize: "12px" }} />
           </button>
         )}
       </div>

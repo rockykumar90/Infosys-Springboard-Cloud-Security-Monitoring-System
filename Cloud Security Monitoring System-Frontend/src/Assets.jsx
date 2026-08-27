@@ -349,58 +349,45 @@ const healthyAssets = assets.filter(
           {/* ================= Dashboard Cards ================= */}
 
           <div className="asset-cards">
-
-            <motion.div
-              whileHover={{ scale: 1.03 }}
-              className="asset-card"
-            >
-              <FaServer className="card-icon blue" />
-
-              <h3>Total Assets</h3>
-
-              <h2>{totalAssets}</h2>
-
+            <motion.div whileHover={{ scale: 1.02 }} className="asset-card">
+              <div className="card-icon-box blue">
+                <FaServer />
+              </div>
+              <div className="card-info">
+                <h3>Total Assets</h3>
+                <h2>{totalAssets}</h2>
+              </div>
             </motion.div>
 
-            <motion.div
-              whileHover={{ scale: 1.03 }}
-              className="asset-card"
-            >
-
-              <FaCheckCircle className="card-icon green" />
-
-              <h3>Active</h3>
-
-              <h2>{activeAssets}</h2>
-
+            <motion.div whileHover={{ scale: 1.02 }} className="asset-card">
+              <div className="card-icon-box green">
+                <FaCheckCircle />
+              </div>
+              <div className="card-info">
+                <h3>Active</h3>
+                <h2>{activeAssets}</h2>
+              </div>
             </motion.div>
 
-            <motion.div
-              whileHover={{ scale: 1.03 }}
-              className="asset-card"
-            >
-
-              <FaExclamationTriangle className="card-icon orange" />
-
-              <h3>Inactive</h3>
-
-              <h2>{inactiveAssets}</h2>
-
+            <motion.div whileHover={{ scale: 1.02 }} className="asset-card">
+              <div className="card-icon-box orange">
+                <FaExclamationTriangle />
+              </div>
+              <div className="card-info">
+                <h3>Inactive</h3>
+                <h2>{inactiveAssets}</h2>
+              </div>
             </motion.div>
 
-            <motion.div
-              whileHover={{ scale: 1.03 }}
-              className="asset-card"
-            >
-
-              <FaCheckCircle className="card-icon teal" />
-
-              <h3>Healthy</h3>
-
-              <h2>{healthyAssets}</h2>
-
+            <motion.div whileHover={{ scale: 1.02 }} className="asset-card">
+              <div className="card-icon-box teal">
+                <FaCheckCircle />
+              </div>
+              <div className="card-info">
+                <h3>Healthy</h3>
+                <h2>{healthyAssets}</h2>
+              </div>
             </motion.div>
-
           </div>
 
           {/* ================= Toolbar ================= */}
