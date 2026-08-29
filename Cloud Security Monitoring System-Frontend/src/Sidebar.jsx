@@ -73,29 +73,27 @@ function Sidebar() {
       path: "/users",
       roles: ["ADMIN"],
     },
-    // {
-    //   title: "Profile",
-    //   icon: <FaUserCircle />,
-    //   path: "/profile",
-    //   roles: ["ADMIN", "ITSM", "USER"],
-    // },
-    // {
-    //   title: "Settings",
-    //   icon: <FaCog />,
-    //   path: "/settings",
-    //   roles: ["ADMIN"],
-    // },
   ];
+
+  const toggleCollapse = () => {
+    const nextState = !collapsed;
+    setCollapsed(nextState);
+    if (nextState) {
+      document.body.classList.add("sidebar-collapsed");
+    } else {
+      document.body.classList.remove("sidebar-collapsed");
+    }
+  };
 
   return (
     <motion.div
       animate={{
-        width: collapsed ? 90 : 270,
+        width: collapsed ? 70 : 250,
       }}
       transition={{
         duration: 0.3,
       }}
-      className="sidebar"
+      className={`sidebar ${collapsed ? "collapsed" : ""}`}
     >
       {/* Logo */}
 
@@ -121,7 +119,8 @@ function Sidebar() {
 
       <button
         className="collapse-btn"
-        onClick={() => setCollapsed(!collapsed)}
+        onClick={toggleCollapse}
+        title={collapsed ? "Expand sidebar" : "Collapse sidebar"}
       >
         {collapsed ? (
           <FaChevronRight />

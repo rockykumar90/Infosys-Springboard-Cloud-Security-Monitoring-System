@@ -775,27 +775,15 @@ export default function Users() {
               </option>
 
               <option value="ADMIN">
-                Administrator
-              </option>
-
-              <option value="ANALYST">
-                Analyst
-              </option>
-
-              <option value="OPERATOR">
-                Operator
-              </option>
-
-              <option value="VIEWER">
-                Viewer
-              </option>
-
-              <option value="USER">
-                User
+                ADMIN (Administrator)
               </option>
 
               <option value="ITSM">
-                ITSM
+                ITSM (Security Analyst)
+              </option>
+
+              <option value="USER">
+                USER (Standard Operator)
               </option>
 
             </select>

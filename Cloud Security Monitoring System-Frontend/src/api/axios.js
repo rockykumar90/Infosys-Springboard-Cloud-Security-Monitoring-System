@@ -14,7 +14,7 @@ const API = axios.create({
     Accept: "application/json",
   },
 
-  timeout: 60000,
+  timeout: 8000,
 });
 
 /* =====================================================

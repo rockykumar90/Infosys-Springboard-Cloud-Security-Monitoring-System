@@ -1,56 +1,144 @@
-/* ===========================
-   Table Container
-=========================== */
+/* =========================================================
+   ASSET TABLE & HORIZONTAL SLIDER STYLES
+========================================================= */
 
-.table-container {
+.table-wrapper {
     width: 100%;
-    overflow-x: auto;
     margin-top: 20px;
-    background: #111827;
-    border-radius: 12px;
-    border: 1px solid #2d3748;
-    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
 }
 
-/* ===========================
-   Asset Table
-=========================== */
+/* Scroll Slider Header Controls */
+.table-scroll-controls {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 16px;
+    background: rgba(15, 23, 42, 0.7);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+    flex-wrap: wrap;
+    gap: 10px;
+}
 
+.scroll-hint {
+    color: #38bdf8;
+    font-size: 12.5px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.scroll-btn-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.table-scroll-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    border-radius: 8px;
+    background: linear-gradient(135deg, rgba(37, 99, 235, 0.25), rgba(29, 78, 216, 0.35));
+    border: 1px solid rgba(59, 130, 246, 0.4);
+    color: #ffffff;
+    font-size: 12.5px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+}
+
+.table-scroll-btn:hover {
+    background: linear-gradient(135deg, #2563eb, #1d4ed8);
+    color: #ffffff;
+    border-color: #3b82f6;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 18px rgba(37, 99, 235, 0.4);
+}
+
+/* Container & Trackpad Swipe Horizontal Scrollbar */
+.table-container {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+    background: linear-gradient(145deg, rgba(17, 24, 39, 0.95), rgba(15, 23, 42, 0.98));
+    backdrop-filter: blur(12px);
+    border-radius: 14px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    padding: 0;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+    scrollbar-width: auto;
+    scrollbar-color: #2563eb #0f172a;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-x: contain;
+    touch-action: pan-x pan-y;
+}
+
+/* Thick Glowing Webkit Scrollbar Slider */
+.table-container::-webkit-scrollbar {
+    height: 12px;
+}
+
+.table-container::-webkit-scrollbar-track {
+    background: #0b1329;
+    border-bottom-left-radius: 14px;
+    border-bottom-right-radius: 14px;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.table-container::-webkit-scrollbar-thumb {
+    background: linear-gradient(90deg, #2563eb, #3b82f6, #60a5fa);
+    border-radius: 10px;
+    border: 2px solid #0b1329;
+    box-shadow: 0 0 12px rgba(37, 99, 235, 0.6);
+    cursor: pointer;
+}
+
+.table-container::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(90deg, #3b82f6, #60a5fa, #93c5fd);
+}
+
+/* Asset Table Layout - Wide 2260px table width to prevent ALL text truncation */
 .asset-table {
     width: 100%;
-    min-width: 1500px;
+    min-width: 2260px;
     border-collapse: collapse;
     table-layout: auto;
 }
 
-/* ===========================
-   Header
-=========================== */
-
+/* Header */
 .asset-table thead tr {
     background: #1e293b;
 }
 
 .asset-table th {
-    padding: 16px 18px;
+    padding: 16px 20px;
     color: #ffffff;
     text-align: left;
-    font-size: 14px;
+    font-size: 13.5px;
     font-weight: 700;
     white-space: nowrap;
     border-bottom: 2px solid #374151;
+    box-sizing: border-box;
 }
 
-/* ===========================
-   Rows
-=========================== */
-
+/* Rows & Cells - NEVER truncate text */
 .asset-table td {
-    padding: 16px 18px;
-    color: #d1d5db;
-    font-size: 14px;
+    padding: 16px 20px;
+    color: #cbd5e1;
+    font-size: 13.5px;
     white-space: nowrap;
     border-bottom: 1px solid #2d3748;
+    box-sizing: border-box;
+    overflow: visible;
+    text-overflow: clip;
 }
 
 .asset-table tbody tr {
@@ -58,46 +146,138 @@
 }
 
 .asset-table tbody tr:hover {
-    background: rgba(59,130,246,0.08);
+    background: rgba(59, 130, 246, 0.08);
 }
 
-/* ===========================
-   Status Badge
-=========================== */
+/* Column Specific Spacious Widths */
+.col-id { min-width: 80px; }
+.col-name { min-width: 260px; }
+.col-type { min-width: 180px; }
+.col-hostname { min-width: 320px; }
+.col-ip { min-width: 160px; }
+.col-os { min-width: 260px; }
+.col-owner { min-width: 180px; }
+.col-dept { min-width: 200px; }
+.col-health { min-width: 150px; }
+.col-status { min-width: 140px; }
+.col-risk { min-width: 110px; }
+.col-actions { min-width: 220px; }
 
-.status {
-    display: inline-block;
-    padding: 6px 14px;
-    border-radius: 30px;
-    color: white;
-    font-size: 12px;
+/* Custom Cell Styles */
+.cell-bold {
     font-weight: 600;
+    color: #f8fafc !important;
 }
 
-.status.active {
+.cell-mono-cyan {
+    font-family: 'Fira Code', 'Courier New', monospace;
+    color: #38bdf8 !important;
+    font-size: 13px;
+}
+
+.cell-mono-blue {
+    font-family: 'Fira Code', 'Courier New', monospace;
+    color: #60a5fa !important;
+    font-size: 13px;
+}
+
+/* =========================================================
+   STATUS & HEALTH LIVE PULSING INDICATOR BADGES
+========================================================= */
+
+.status-badge-container {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 5px 12px;
+    border-radius: 20px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    white-space: nowrap;
+}
+
+.badge-text {
+    font-size: 12.5px;
+    font-weight: 600;
+    color: #f8fafc;
+}
+
+/* Small Live Circular Indicator Dot */
+.pulse-dot {
+    width: 8px;
+    height: 8px;
+    min-width: 8px;
+    min-height: 8px;
+    border-radius: 50%;
+    display: inline-block;
+    flex-shrink: 0;
+}
+
+/* Pulsing Animations for Live Status Indicators */
+.pulse-dot.healthy,
+.pulse-dot.active {
     background: #22c55e;
+    box-shadow: 0 0 8px #22c55e;
+    animation: smoothPulseGreen 2.2s infinite ease-in-out;
 }
 
-.status.inactive {
-    background: #6b7280;
-}
-
-.status.healthy {
-    background: #16a34a;
-}
-
-.status.warning {
+.pulse-dot.warning {
     background: #f59e0b;
+    box-shadow: 0 0 8px #f59e0b;
+    animation: smoothPulseYellow 2s infinite ease-in-out;
 }
 
-.status.critical {
-    background: #dc2626;
+.pulse-dot.critical {
+    background: #ef4444;
+    box-shadow: 0 0 8px #ef4444;
+    animation: smoothPulseRed 1.8s infinite ease-in-out;
 }
 
-/* ===========================
-   Risk Badge
-=========================== */
+.pulse-dot.inactive {
+    background: #94a3b8;
+    box-shadow: 0 0 4px #94a3b8;
+}
 
+@keyframes smoothPulseGreen {
+    0%, 100% {
+        transform: scale(1);
+        opacity: 1;
+        box-shadow: 0 0 4px rgba(34, 197, 94, 0.5);
+    }
+    50% {
+        transform: scale(1.35);
+        opacity: 0.55;
+        box-shadow: 0 0 12px rgba(34, 197, 94, 0.9);
+    }
+}
+
+@keyframes smoothPulseYellow {
+    0%, 100% {
+        transform: scale(1);
+        opacity: 1;
+        box-shadow: 0 0 4px rgba(245, 158, 11, 0.5);
+    }
+    50% {
+        transform: scale(1.35);
+        opacity: 0.55;
+        box-shadow: 0 0 12px rgba(245, 158, 11, 0.9);
+    }
+}
+
+@keyframes smoothPulseRed {
+    0%, 100% {
+        transform: scale(1);
+        opacity: 1;
+        box-shadow: 0 0 4px rgba(239, 68, 68, 0.5);
+    }
+    50% {
+        transform: scale(1.4);
+        opacity: 0.5;
+        box-shadow: 0 0 14px rgba(239, 68, 68, 0.9);
+    }
+}
+
+/* Risk Badges */
 .risk-low {
     color: #22c55e;
     font-weight: 700;
@@ -113,26 +293,23 @@
     font-weight: 700;
 }
 
-/* ===========================
-   Buttons
-=========================== */
-
+/* Action Buttons */
 .action-buttons {
     display: flex;
-    gap: 10px;
+    gap: 8px;
 }
 
 .view-btn,
 .edit-btn,
 .delete-btn {
     border: none;
-    padding: 8px 16px;
-    border-radius: 6px;
+    padding: 7px 14px;
+    border-radius: 8px;
     color: white;
     cursor: pointer;
-    font-size: 13px;
+    font-size: 12.5px;
     font-weight: 600;
-    transition: .3s;
+    transition: all 0.2s ease;
 }
 
 .view-btn {
@@ -149,12 +326,15 @@
 
 .view-btn:hover {
     background: #1d4ed8;
+    transform: translateY(-1px);
 }
 
 .edit-btn:hover {
     background: #059669;
+    transform: translateY(-1px);
 }
 
 .delete-btn:hover {
     background: #dc2626;
+    transform: translateY(-1px);
 }

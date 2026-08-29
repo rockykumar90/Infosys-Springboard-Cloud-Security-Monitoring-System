@@ -210,13 +210,9 @@ function Navbar() {
       =============================================== */}
 
       <div className="navbar-center">
-
-        <div className="search-box">
-
+        <div className="navbar-search-container">
           <SearchBar />
-
         </div>
-
       </div>
 
       {/* ==============================================

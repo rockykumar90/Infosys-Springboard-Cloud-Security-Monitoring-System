@@ -25,7 +25,7 @@ function Register() {
 
     department: "",
 
-    role: "USER",
+    role: "",
 
     password: "",
 
@@ -94,9 +94,19 @@ function Register() {
 
     // Department
 
-    if (!form.department.trim()) {
+    if (!form.department || !form.department.trim()) {
 
-      toast.warning("Please enter your department.");
+      toast.warning("Please select your department.");
+
+      return;
+
+    }
+
+    // Role
+
+    if (!form.role || !form.role.trim()) {
+
+      toast.warning("Please select your role.");
 
       return;
 
@@ -260,48 +270,34 @@ function Register() {
 
           />
 
-          <input
-
-            type="text"
-
+          <select
             name="department"
-
-            placeholder="Department"
-
             value={form.department}
-
             onChange={update}
-
-          />
+            className={!form.department ? "select-placeholder" : ""}
+          >
+            <option value="" disabled hidden>Department</option>
+            <option value="SOC">SOC (Security Operations Center)</option>
+            <option value="IT">IT Infrastructure</option>
+            <option value="Cyber Security">Cyber Security</option>
+            <option value="Network">Network Engineering</option>
+            <option value="DevOps">DevOps & Cloud</option>
+            <option value="Software Engineering">Software Engineering</option>
+            <option value="Database Operations">Database Operations</option>
+            <option value="HR">HR</option>
+            <option value="Finance">Finance</option>
+          </select>
 
           <select
-
             name="role"
-
             value={form.role}
-
             onChange={update}
-
+            className={!form.role ? "select-placeholder" : ""}
           >
-
-            <option value="USER">
-
-              USER
-
-            </option>
-
-           {/* <option value="ITSM">
-
-              ITSM
-
-            </option> */}
-
-            <option value="ADMIN">
-
-              ADMIN
-
-            </option>
-
+            <option value="" disabled hidden>User Role</option>
+            <option value="USER">USER (Standard Operator)</option>
+            <option value="ITSM">ITSM (Security Analyst)</option>
+            <option value="ADMIN">ADMIN (Administrator)</option>
           </select>
 
           {/* Password */}

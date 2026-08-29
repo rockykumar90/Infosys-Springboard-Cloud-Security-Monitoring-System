@@ -112,7 +112,8 @@ export default function SearchBar({
     <div
       style={{
         position: "relative",
-        width: "330px",
+        width: "100%",
+        maxWidth: "280px",
       }}
     >
       {/* Search Box */}

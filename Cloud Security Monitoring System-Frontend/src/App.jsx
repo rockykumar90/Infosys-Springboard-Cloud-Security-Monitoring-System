@@ -16,10 +16,12 @@ import Settings from "./Settings";
 
 import ProtectedRoute from "./ProtectedRoute";
 import NotFound from "./NotFound";
+import Chatbot from "./Chatbot";
 
 function App() {
   return (
-    <Routes>
+    <>
+      <Routes>
       {/* ================= Authentication ================= */}
 
       <Route path="/" element={<Navigate to="/login" replace />} />
@@ -142,7 +144,8 @@ function App() {
 
       <Route path="*" element={<NotFound />} />
     </Routes>
-  );
+    <Chatbot />
+  </>);
 }
 
 export default App;
