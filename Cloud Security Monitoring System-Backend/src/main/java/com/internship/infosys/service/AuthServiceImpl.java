@@ -92,6 +92,17 @@ public class AuthServiceImpl implements AuthService {
                 .orElseThrow(() ->
                         new RuntimeException("User not found"));
 
+        // Store current date & time as lastLogin
+        try {
+            java.time.LocalDateTime now = java.time.LocalDateTime.now();
+            java.time.format.DateTimeFormatter formatter = java.time.format.DateTimeFormatter.ofPattern("MMM dd, yyyy, hh:mm a");
+            user.setLastLogin(now.format(formatter));
+            user.setEnabled(true);
+            userRepository.save(user);
+        } catch (Exception e) {
+            // Ignore format errors
+        }
+
         String token = jwtUtil.generateToken(user.getEmail());
 
         LoginResponse response = new LoginResponse();

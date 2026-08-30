@@ -62,6 +62,9 @@ public class UserServiceImpl implements UserService {
         user.setEmail(updatedUser.getEmail());
         user.setDepartment(updatedUser.getDepartment());
         user.setRole(updatedUser.getRole());
+        if (updatedUser.getEnabled() != null) {
+            user.setEnabled(updatedUser.getEnabled());
+        }
 
         if (updatedUser.getPassword() != null &&
                 !updatedUser.getPassword().isBlank()) {

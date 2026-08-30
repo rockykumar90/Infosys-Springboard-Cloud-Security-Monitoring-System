@@ -35,8 +35,16 @@ export function AuthProvider({ children }) {
   =========================== */
 
   const loadProfile = async () => {
+    const token = localStorage.getItem("token");
+    const savedUser = localStorage.getItem("currentUser");
+
+    if (!token) {
+      setLoading(false);
+      return;
+    }
+
     try {
-      const response = await API.get("/users/profile");
+      const response = await API.get("/users/profile", { timeout: 4000 });
 
       setUser(response.data);
 
@@ -45,8 +53,19 @@ export function AuthProvider({ children }) {
         JSON.stringify(response.data)
       );
     } catch (error) {
-      console.error(error);
-      logout(false);
+      console.warn("Profile sync error on refresh:", error?.message);
+
+      // ONLY log out if token is explicitly invalidated (401 Unauthorized)
+      if (error.response?.status === 401) {
+        logout(false);
+      } else if (savedUser) {
+        // Keep active session intact from localStorage
+        try {
+          setUser(JSON.parse(savedUser));
+        } catch (e) {
+          console.error("Failed to parse savedUser:", e);
+        }
+      }
     } finally {
       setLoading(false);
     }
@@ -57,13 +76,6 @@ export function AuthProvider({ children }) {
   =========================== */
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
-
-    if (!token) {
-      setLoading(false);
-      return;
-    }
-
     loadProfile();
   }, []);
 

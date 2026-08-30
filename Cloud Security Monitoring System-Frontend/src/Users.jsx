@@ -4,6 +4,7 @@ import React, {
   useEffect,
   useMemo,
   useState,
+  useRef,
 } from "react";
 
 import { motion } from "framer-motion";
@@ -19,6 +20,8 @@ import {
   FaSyncAlt,
   FaTimes,
   FaSave,
+  FaChevronLeft,
+  FaChevronRight,
 } from "react-icons/fa";
 
 import { toast } from "react-toastify";
@@ -27,12 +30,22 @@ import Sidebar from "./Sidebar";
 import Navbar from "./Navbar";
 import Footer from "./Footer";
 import Pagination from "./Pagination";
+import { useAuth } from "./AuthContext";
 
 import API from "./api/axios";
 
 import "./Users.css";
 
 export default function Users() {
+  const { user: currentUser } = useAuth();
+  const tableRef = useRef(null);
+
+  const scrollTable = (direction) => {
+    if (tableRef.current) {
+      const scrollAmount = direction === "left" ? -400 : 400;
+      tableRef.current.scrollBy({ left: scrollAmount, behavior: "smooth" });
+    }
+  };
 
   /* =====================================================
       STATES
@@ -876,185 +889,203 @@ export default function Users() {
           {!loading &&
             !error && (
 
-              <motion.div
-                className="table-container"
-                initial={{
-                  opacity: 0,
-                  y: 20
-                }}
-                animate={{
-                  opacity: 1,
-                  y: 0
-                }}
-              >
+              <div className="users-table-wrapper" style={{ width: "100%", display: "flex", flexDirection: "column", gap: "12px" }}>
+                {/* Scroll Slider Controls */}
+                <div className="table-scroll-controls" style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "10px 16px", background: "rgba(15, 23, 42, 0.7)", border: "1px solid rgba(255, 255, 255, 0.08)", borderRadius: "12px", flexWrap: "wrap", gap: "10px" }}>
+                  <span className="scroll-hint" style={{ color: "#38bdf8", fontSize: "12.5px", fontWeight: "600", display: "flex", alignItems: "center", gap: "6px" }}>
+                    💡 Use buttons or swipe trackpad horizontally to view all user columns
+                  </span>
+                  <div className="scroll-btn-group" style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                    <button type="button" className="table-scroll-btn" onClick={() => scrollTable("left")} style={{ display: "inline-flex", alignItems: "center", gap: "8px", padding: "8px 16px", borderRadius: "8px", background: "linear-gradient(135deg, rgba(37, 99, 235, 0.25), rgba(29, 78, 216, 0.35))", border: "1px solid rgba(59, 130, 246, 0.4)", color: "#ffffff", fontSize: "12.5px", fontWeight: "600", cursor: "pointer" }}>
+                      <FaChevronLeft /> Scroll Left
+                    </button>
+                    <button type="button" className="table-scroll-btn" onClick={() => scrollTable("right")} style={{ display: "inline-flex", alignItems: "center", gap: "8px", padding: "8px 16px", borderRadius: "8px", background: "linear-gradient(135deg, rgba(37, 99, 235, 0.25), rgba(29, 78, 216, 0.35))", border: "1px solid rgba(59, 130, 246, 0.4)", color: "#ffffff", fontSize: "12.5px", fontWeight: "600", cursor: "pointer" }}>
+                      Scroll Right <FaChevronRight />
+                    </button>
+                  </div>
+                </div>
 
-                <table
-                  className="users-table"
+                <motion.div
+                  className="table-container"
+                  ref={tableRef}
+                  initial={{
+                    opacity: 0,
+                    y: 20
+                  }}
+                  animate={{
+                    opacity: 1,
+                    y: 0
+                  }}
+                  style={{ overflowX: "auto", width: "100%" }}
                 >
 
-                  <thead>
+                  <table
+                    className="users-table"
+                    style={{ minWidth: "1200px" }}
+                  >
 
-                    <tr>
+                    <thead>
 
-                      <th>
-                        Name
-                      </th>
+                      <tr>
 
-                      <th>
-                        Email
-                      </th>
+                        <th style={{ minWidth: "180px" }}>
+                          Name
+                        </th>
 
-                      <th>
-                        Department
-                      </th>
+                        <th style={{ minWidth: "220px" }}>
+                          Email
+                        </th>
 
-                      <th>
-                        Role
-                      </th>
+                        <th style={{ minWidth: "180px" }}>
+                          Department
+                        </th>
 
-                      <th>
-                        Status
-                      </th>
+                        <th style={{ minWidth: "140px" }}>
+                          Role
+                        </th>
 
-                      <th>
-                        Last Login
-                      </th>
+                        <th style={{ minWidth: "120px" }}>
+                          Status
+                        </th>
 
-                      <th>
-                        Actions
-                      </th>
+                        <th style={{ minWidth: "160px" }}>
+                          Last Login
+                        </th>
 
-                    </tr>
+                        <th style={{ minWidth: "140px" }}>
+                          Actions
+                        </th>
 
-                  </thead>
+                      </tr>
 
-                  <tbody>
+                    </thead>
 
-                    {currentUsers.map(
-                      (user) => (
+                    <tbody>
 
-                        <tr
-                          key={user.id}
-                        >
+                      {currentUsers.map(
+                        (userItem) => {
+                          const isSelf = currentUser && (
+                            String(currentUser.id) === String(userItem.id) ||
+                            (currentUser.email && userItem.email && currentUser.email.toLowerCase() === userItem.email.toLowerCase()) ||
+                            (currentUser.username && userItem.username && currentUser.username.toLowerCase() === userItem.username.toLowerCase())
+                          );
 
-                          <td>
+                          const isAdminUser = currentUser?.role === "ADMIN";
 
-                            {
-                              user.name ||
-                              user.username ||
-                              "-"
-                            }
+                          return (
 
-                          </td>
+                          <tr
+                            key={userItem.id}
+                          >
 
-                          <td>
-                            {user.email || "-"}
-                          </td>
+                            <td style={{ fontWeight: 600, color: "#f8fafc" }}>
 
-                          <td>
-                            {user.department || "-"}
-                          </td>
+                              {
+                                userItem.name ||
+                                userItem.username ||
+                                "-"
+                              }
 
-                          <td>
+                            </td>
 
-                            <span
-                              className={`role-badge ${
-                                String(
-                                  user.role ||
-                                  ""
-                                ).toLowerCase()
-                              }`}
-                            >
+                            <td style={{ fontFamily: "monospace", color: "#60a5fa" }}>
+                              {userItem.email || "-"}
+                            </td>
 
-                              {user.role || "-"}
+                            <td>
+                              {userItem.department || "-"}
+                            </td>
 
-                            </span>
+                            <td>
 
-                          </td>
-
-                          <td>
-
-                            <span
-                              className={`status-badge ${
-                                user.enabled
-                                  ? "active"
-                                  : "inactive"
-                              }`}
-                            >
-
-                              {user.enabled
-                                ? "Active"
-                                : "Disabled"}
-
-                            </span>
-
-                          </td>
-
-                          <td>
-
-                            {
-                              user.lastLogin ||
-                              "Never"
-                            }
-
-                          </td>
-
-                          <td>
-
-                            <div
-                              className="table-actions"
-                            >
-
-                              {/* EDIT */}
-
-                              {/* <button
-                                type="button"
-                                className="edit-btn"
-                                title="Edit User"
-                                onClick={() =>
-                                  handleEdit(
-                                    user
-                                  )
-                                }
+                              <span
+                                className={`role-badge ${
+                                  String(
+                                    userItem.role ||
+                                    ""
+                                  ).toLowerCase()
+                                }`}
                               >
 
-                                <FaEdit />
+                                {userItem.role || "-"}
 
-                              </button> */}
+                              </span>
 
-                              {/* DELETE */}
+                            </td>
 
-                              <button
-                                type="button"
-                                className="delete-btn"
-                                title="Delete User"
-                                onClick={() =>
-                                  deleteUser(
-                                    user.id
-                                  )
-                                }
+                            <td>
+
+                              <span
+                                className={`status-badge ${
+                                  userItem.enabled
+                                    ? "active"
+                                    : "inactive"
+                                }`}
                               >
 
-                                <FaTrash />
+                                {userItem.enabled
+                                  ? "Active"
+                                  : "Disabled"}
 
-                              </button>
+                              </span>
 
-                            </div>
+                            </td>
 
-                          </td>
+                            <td>
 
-                        </tr>
+                              {
+                                userItem.lastLogin ||
+                                "Never"
+                              }
 
-                      )
-                    )}
+                            </td>
+
+                            <td>
+
+                              <div
+                                className="table-actions"
+                              >
+
+                                {isSelf ? (
+                                  <span style={{ fontSize: "11px", fontWeight: "700", padding: "4px 10px", borderRadius: "12px", background: "rgba(59, 130, 246, 0.2)", border: "1px solid rgba(59, 130, 246, 0.4)", color: "#60a5fa" }}>
+                                    Current User (You)
+                                  </span>
+                                ) : isAdminUser ? (
+                                  <button
+                                    type="button"
+                                    className="delete-btn"
+                                    title="Delete User"
+                                    onClick={() =>
+                                      deleteUser(
+                                        userItem.id
+                                      )
+                                    }
+                                  >
+
+                                    <FaTrash />
+
+                                  </button>
+                                ) : (
+                                  <span style={{ fontSize: "11px", color: "#94a3b8" }}>
+                                    Read-Only
+                                  </span>
+                                )}
+
+                              </div>
+
+                            </td>
+
+                          </tr>
+
+                        );
+                      }
+                      )}
 
                   </tbody>
-
                 </table>
-
               </motion.div>
-
-            )}
+            </div>
+          )}
 
           {/* =================================================
               EMPTY STATE

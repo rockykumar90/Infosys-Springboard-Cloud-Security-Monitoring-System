@@ -35,7 +35,7 @@ function Sidebar() {
       title: "Assets",
       icon: <FaServer />,
       path: "/assets",
-      roles: ["ADMIN", "ITSM"],
+      roles: ["ADMIN", "ITSM", "USER"],
     },
     {
       title: "Alerts",
@@ -47,19 +47,19 @@ function Sidebar() {
       title: "Incidents",
       icon: <FaShieldAlt />,
       path: "/incidents",
-      roles: ["ADMIN", "ITSM"],
+      roles: ["ADMIN", "ITSM", "USER"],
     },
     {
       title: "Vulnerabilities",
       icon: <FaBug />,
       path: "/vulnerabilities",
-      roles: ["ADMIN", "ITSM"],
+      roles: ["ADMIN", "ITSM", "USER"],
     },
     {
       title: "Cloud",
       icon: <FaCloud />,
       path: "/cloud",
-      roles: ["ADMIN", "ITSM"],
+      roles: ["ADMIN", "ITSM", "USER"],
     },
     {
       title: "Reports",
@@ -71,7 +71,7 @@ function Sidebar() {
       title: "Users",
       icon: <FaUsers />,
       path: "/users",
-      roles: ["ADMIN"],
+      roles: ["ADMIN", "ITSM", "USER"],
     },
   ];
 

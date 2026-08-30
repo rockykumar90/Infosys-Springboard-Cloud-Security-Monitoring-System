@@ -46,7 +46,7 @@ function App() {
       <Route
         path="/assets"
         element={
-          <ProtectedRoute allowedRoles={["ADMIN", "ITSM"]}>
+          <ProtectedRoute allowedRoles={["ADMIN", "ITSM", "USER"]}>
             <Assets />
           </ProtectedRoute>
         }
@@ -68,7 +68,7 @@ function App() {
       <Route
         path="/vulnerabilities"
         element={
-          <ProtectedRoute allowedRoles={["ADMIN", "ITSM"]}>
+          <ProtectedRoute allowedRoles={["ADMIN", "ITSM", "USER"]}>
             <Vulnerabilities />
           </ProtectedRoute>
         }
@@ -79,7 +79,7 @@ function App() {
       <Route
         path="/incidents"
         element={
-          <ProtectedRoute allowedRoles={["ADMIN", "ITSM"]}>
+          <ProtectedRoute allowedRoles={["ADMIN", "ITSM", "USER"]}>
             <Incidents />
           </ProtectedRoute>
         }
@@ -90,7 +90,7 @@ function App() {
       <Route
         path="/cloud"
         element={
-          <ProtectedRoute allowedRoles={["ADMIN", "ITSM"]}>
+          <ProtectedRoute allowedRoles={["ADMIN", "ITSM", "USER"]}>
             <Cloud />
           </ProtectedRoute>
         }
@@ -112,7 +112,7 @@ function App() {
       <Route
         path="/users"
         element={
-          <ProtectedRoute allowedRoles={["ADMIN"]}>
+          <ProtectedRoute allowedRoles={["ADMIN", "ITSM", "USER"]}>
             <Users />
           </ProtectedRoute>
         }

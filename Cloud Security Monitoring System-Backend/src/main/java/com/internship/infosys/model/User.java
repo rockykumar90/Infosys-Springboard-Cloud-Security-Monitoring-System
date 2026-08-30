@@ -24,6 +24,12 @@ public class User {
     @Enumerated(EnumType.STRING)
     private Role role;
 
+    @Column(name = "last_login")
+    private String lastLogin;
+
+    @Column(name = "enabled")
+    private Boolean enabled = true;
+
     public User() {
     }
 
@@ -35,6 +41,7 @@ public class User {
         this.password = password;
         this.department = department;
         this.role = role;
+        this.enabled = true;
     }
 
     public Long getId() {
@@ -83,6 +90,22 @@ public class User {
 
     public void setRole(Role role) {
         this.role = role;
+    }
+
+    public String getLastLogin() {
+        return lastLogin;
+    }
+
+    public void setLastLogin(String lastLogin) {
+        this.lastLogin = lastLogin;
+    }
+
+    public Boolean getEnabled() {
+        return enabled != null ? enabled : true;
+    }
+
+    public void setEnabled(Boolean enabled) {
+        this.enabled = enabled;
     }
 
 }

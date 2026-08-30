@@ -28,9 +28,13 @@ import {
   deleteAsset,
 } from "./api/assetsApi";
 
+import { useAuth } from "./AuthContext";
 import "./Assets.css";
 
 export default function Assets() {
+
+  const { user } = useAuth();
+  const canModify = user?.role === "ADMIN" || user?.role === "ITSM";
 
   // ==========================
   // State
@@ -464,25 +468,22 @@ const healthyAssets = assets.filter(
 
               </button>
 
-              <button
-
-                className="add-btn"
-
-                onClick={() => {
-
-                  setEditingAsset(null);
-
-                  setShowForm(true);
-
-                }}
-
-              >
-
-                <FaPlus />
-
-                Add Asset
-
-              </button>
+              {canModify ? (
+                <button
+                  className="add-btn"
+                  onClick={() => {
+                    setEditingAsset(null);
+                    setShowForm(true);
+                  }}
+                >
+                  <FaPlus />
+                  Add Asset
+                </button>
+              ) : (
+                <span className="read-only-badge" style={{ padding: "8px 16px", borderRadius: "8px", background: "rgba(100, 116, 139, 0.2)", border: "1px solid rgba(148, 163, 184, 0.3)", color: "#cbd5e1", fontSize: "13px", fontWeight: "600" }}>
+                  🔒 Read-Only (USER Mode)
+                </span>
+              )}
               {/* <button
   type="button"
   className="cancel-btn"
@@ -652,19 +653,13 @@ const healthyAssets = assets.filter(
             >
 
               <AssetTable
-
                 assets={currentAssets}
-
-                onEdit={(asset) => {
-
+                onView={(asset) => setSelectedAsset(asset)}
+                onEdit={canModify ? (asset) => {
                   setEditingAsset(asset);
-
                   setShowForm(true);
-
-                }}
-
-                onDelete={handleDelete}
-
+                } : null}
+                onDelete={canModify ? handleDelete : null}
               />
 
             </motion.div>
