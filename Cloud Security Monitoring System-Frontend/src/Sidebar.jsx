@@ -14,7 +14,7 @@ import {
   FaChevronRight,
 } from "react-icons/fa";
 import { NavLink } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { useAuth } from "./AuthContext";
 import "./Dashboard.css";
@@ -71,7 +71,7 @@ function Sidebar() {
       title: "Users",
       icon: <FaUsers />,
       path: "/users",
-      roles: ["ADMIN", "ITSM", "USER"],
+      roles: ["ADMIN"],
     },
   ];
 
@@ -84,6 +84,16 @@ function Sidebar() {
       document.body.classList.remove("sidebar-collapsed");
     }
   };
+
+  useEffect(() => {
+    const handleCollapseEvent = () => {
+      setCollapsed(true);
+      document.body.classList.add("sidebar-collapsed");
+    };
+
+    window.addEventListener("collapse-sidebar", handleCollapseEvent);
+    return () => window.removeEventListener("collapse-sidebar", handleCollapseEvent);
+  }, []);
 
   return (
     <motion.div

@@ -46,11 +46,13 @@ function AssetTable({
     );
   }
 
+  const hasActions = Boolean(onEdit || onDelete);
+
   return (
     <div className="table-wrapper">
       {/* Scroll Slider Controls */}
       <div className="table-scroll-controls">
-        <span className="scroll-hint">💡 Use buttons or swipe trackpad horizontally to view all 12 full columns</span>
+        <span className="scroll-hint">💡 Use buttons or swipe trackpad horizontally to view all columns</span>
         <div className="scroll-btn-group">
           <button className="table-scroll-btn" onClick={() => scroll("left")} title="Scroll Left">
             <FaChevronLeft /> Scroll Left
@@ -76,7 +78,7 @@ function AssetTable({
               <th className="col-health">Health</th>
               <th className="col-status">Status</th>
               <th className="col-risk">Risk</th>
-              <th className="col-actions">Actions</th>
+              {hasActions && <th className="col-actions">Actions</th>}
             </tr>
           </thead>
           <tbody>
@@ -115,23 +117,20 @@ function AssetTable({
                     {asset.riskScore}%
                   </span>
                 </td>
-                <td className="col-actions action-buttons">
-                  {onView && (
-                    <button className="view-btn" onClick={() => onView(asset)}>
-                      View
-                    </button>
-                  )}
-                  {onEdit && (
-                    <button className="edit-btn" onClick={() => onEdit(asset)}>
-                      Edit
-                    </button>
-                  )}
-                  {onDelete && (
-                    <button className="delete-btn" onClick={() => onDelete(asset.id)}>
-                      Delete
-                    </button>
-                  )}
-                </td>
+                {hasActions && (
+                  <td className="col-actions action-buttons">
+                    {onEdit && (
+                      <button className="edit-btn" onClick={() => onEdit(asset)}>
+                        Edit
+                      </button>
+                    )}
+                    {onDelete && (
+                      <button className="delete-btn" onClick={() => onDelete(asset.id)}>
+                        Delete
+                      </button>
+                    )}
+                  </td>
+                )}
               </tr>
             ))}
           </tbody>

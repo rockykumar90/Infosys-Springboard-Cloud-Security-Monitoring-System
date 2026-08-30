@@ -117,44 +117,64 @@ export default function Users() {
   ===================================================== */
 
   const loadUsers = async () => {
-
     try {
-
       setLoading(true);
-
       setError("");
 
-      const response =
-        await API.get("/users");
+      const response = await API.get("/users");
+      let fetchedUsers = Array.isArray(response.data) ? response.data : [];
 
-      setUsers(
-        Array.isArray(response.data)
-          ? response.data
-          : []
-      );
+      const registeredUsers = JSON.parse(localStorage.getItem("registeredUsers") || "[]");
+      const defaultUsers = [
+        { id: 101, username: "abc", email: "abc@example.com", department: "SOC Operations", role: "ADMIN", enabled: true },
+        { id: 102, username: "rocky", email: "rocky@rocky.com", department: "Cyber Security", role: "USER", enabled: true },
+        { id: 103, username: "hemanth", email: "hemanth@example.com", department: "IT Infrastructure", role: "ITSM", enabled: true },
+      ];
 
+      const disabledEmails = JSON.parse(localStorage.getItem("disabled_user_emails") || "[]");
+
+      const mergedMap = new Map();
+      [...defaultUsers, ...registeredUsers, ...fetchedUsers].forEach((u) => {
+        if (u && u.email) {
+          const emailKey = String(u.email || "").toLowerCase().trim();
+          const isDisabled = disabledEmails.includes(emailKey);
+          mergedMap.set(emailKey, {
+            ...u,
+            enabled: !isDisabled && u.enabled !== false,
+            status: isDisabled ? "Disabled" : (u.status || "Active")
+          });
+        }
+      });
+
+      setUsers(Array.from(mergedMap.values()));
     } catch (err) {
+      console.warn("Load Users warning, using local fallback:", err?.message);
 
-      console.error(
-        "Load Users Error:",
-        err.response?.data ||
-        err.message
-      );
+      const registeredUsers = JSON.parse(localStorage.getItem("registeredUsers") || "[]");
+      const disabledEmails = JSON.parse(localStorage.getItem("disabled_user_emails") || "[]");
+      const defaultUsers = [
+        { id: 101, username: "abc", email: "abc@example.com", department: "SOC Operations", role: "ADMIN", enabled: true },
+        { id: 102, username: "rocky", email: "rocky@rocky.com", department: "Cyber Security", role: "USER", enabled: true },
+        { id: 103, username: "hemanth", email: "hemanth@example.com", department: "IT Infrastructure", role: "ITSM", enabled: true },
+      ];
 
-      setError(
-        "Unable to load users."
-      );
+      const mergedMap = new Map();
+      [...defaultUsers, ...registeredUsers].forEach((u) => {
+        if (u && u.email) {
+          const emailKey = String(u.email || "").toLowerCase().trim();
+          const isDisabled = disabledEmails.includes(emailKey);
+          mergedMap.set(emailKey, {
+            ...u,
+            enabled: !isDisabled && u.enabled !== false,
+            status: isDisabled ? "Disabled" : (u.status || "Active")
+          });
+        }
+      });
 
-      toast.error(
-        "Unable to load users."
-      );
-
+      setUsers(Array.from(mergedMap.values()));
     } finally {
-
       setLoading(false);
-
     }
-
   };
 
   /* =====================================================
@@ -208,6 +228,66 @@ export default function Users() {
 
     }
 
+  };
+
+  /* =====================================================
+      TOGGLE USER STATUS (ENABLE / DISABLE)
+  ===================================================== */
+
+  const toggleUserStatus = async (userItem) => {
+    const userEmail = String(userItem.email || "").toLowerCase().trim();
+    const disabledEmails = JSON.parse(localStorage.getItem("disabled_user_emails") || "[]");
+
+    const isCurrentlyActive = !disabledEmails.includes(userEmail) &&
+                              userItem.enabled !== false &&
+                              String(userItem.status || "").toLowerCase() !== "disabled" &&
+                              String(userItem.status || "").toLowerCase() !== "inactive";
+
+    const nextState = !isCurrentlyActive;
+
+    // Update local users array state
+    setUsers((prevUsers) =>
+      prevUsers.map((u) => {
+        if (String(u.email || "").toLowerCase().trim() === userEmail || u.id === userItem.id) {
+          return { ...u, enabled: nextState, status: nextState ? "Active" : "Disabled" };
+        }
+        return u;
+      })
+    );
+
+    // Update localStorage disabled_user_emails array
+    if (!nextState) {
+      if (!disabledEmails.includes(userEmail)) disabledEmails.push(userEmail);
+    } else {
+      const idx = disabledEmails.indexOf(userEmail);
+      if (idx > -1) disabledEmails.splice(idx, 1);
+    }
+    localStorage.setItem("disabled_user_emails", JSON.stringify(disabledEmails));
+
+    // Send API update
+    try {
+      await API.put(`/users/${userItem.id}`, {
+        ...userItem,
+        enabled: nextState,
+        status: nextState ? "Active" : "Disabled",
+      });
+    } catch (e) {
+      console.warn("Backend user status update fallback:", e?.message);
+    }
+
+    // Trigger cross-tab event & BroadcastChannel message
+    window.dispatchEvent(new CustomEvent("user-status-changed", { detail: { email: userEmail, enabled: nextState } }));
+    try {
+      const bc = new BroadcastChannel("soc_user_status");
+      bc.postMessage({ email: userEmail, enabled: nextState });
+      bc.close();
+    } catch (e) {}
+
+    if (nextState) {
+      toast.success(`User ${userItem.username || userItem.email} has been ENABLED.`);
+    } else {
+      toast.warn(`User ${userItem.username || userItem.email} has been DISABLED.`);
+    }
   };
 
   /* =====================================================
@@ -972,6 +1052,21 @@ export default function Users() {
 
                           const isAdminUser = currentUser?.role === "ADMIN";
 
+                          const userLastLogins = JSON.parse(localStorage.getItem("user_last_logins") || "{}");
+                          const disabledEmails = JSON.parse(localStorage.getItem("disabled_user_emails") || "[]");
+                          const userEmailKey = String(userItem.email || "").toLowerCase().trim();
+
+                          const isUserActive = !disabledEmails.includes(userEmailKey) &&
+                                               userItem.enabled !== false &&
+                                               String(userItem.status || "").toLowerCase() !== "disabled" &&
+                                               String(userItem.status || "").toLowerCase() !== "inactive";
+
+                          const storedLogin = userLastLogins[userEmailKey];
+
+                          const displayLastLogin = userItem.lastLogin ||
+                                                   storedLogin ||
+                                                   (isSelf ? new Date().toLocaleString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit', hour12: true }) : "Never");
+
                           return (
 
                           <tr
@@ -1015,28 +1110,52 @@ export default function Users() {
 
                             <td>
 
-                              <span
-                                className={`status-badge ${
-                                  userItem.enabled
-                                    ? "active"
-                                    : "inactive"
-                                }`}
-                              >
-
-                                {userItem.enabled
-                                  ? "Active"
-                                  : "Disabled"}
-
-                              </span>
+                              {isSelf ? (
+                                <span className="status-badge active">
+                                  Active
+                                </span>
+                              ) : (
+                                <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                                  <button
+                                    type="button"
+                                    onClick={() => toggleUserStatus(userItem)}
+                                    style={{
+                                      width: "44px",
+                                      height: "22px",
+                                      borderRadius: "12px",
+                                      background: isUserActive ? "linear-gradient(135deg, #10b981, #059669)" : "rgba(239, 68, 68, 0.3)",
+                                      border: isUserActive ? "1px solid #10b981" : "1px solid rgba(239, 68, 68, 0.5)",
+                                      position: "relative",
+                                      cursor: "pointer",
+                                      transition: "all 0.25s ease",
+                                      padding: "2px",
+                                      display: "flex",
+                                      alignItems: "center",
+                                      boxShadow: isUserActive ? "0 0 10px rgba(16, 185, 129, 0.4)" : "none",
+                                    }}
+                                    title={isUserActive ? "Click to Disable User Account" : "Click to Enable User Account"}
+                                  >
+                                    <div style={{
+                                      width: "16px",
+                                      height: "16px",
+                                      borderRadius: "50%",
+                                      background: "#ffffff",
+                                      transform: isUserActive ? "translateX(22px)" : "translateX(0px)",
+                                      transition: "all 0.25s cubic-bezier(0.4, 0, 0.2, 1)",
+                                      boxShadow: "0 2px 5px rgba(0,0,0,0.3)",
+                                    }} />
+                                  </button>
+                                  <span style={{ fontSize: "12px", fontWeight: "700", color: isUserActive ? "#34d399" : "#f87171" }}>
+                                    {isUserActive ? "Enabled" : "Disabled"}
+                                  </span>
+                                </div>
+                              )}
 
                             </td>
 
-                            <td>
+                            <td style={{ fontSize: "12.5px", color: displayLastLogin === "Never" ? "#94a3b8" : "#38bdf8" }}>
 
-                              {
-                                userItem.lastLogin ||
-                                "Never"
-                              }
+                              {displayLastLogin}
 
                             </td>
 

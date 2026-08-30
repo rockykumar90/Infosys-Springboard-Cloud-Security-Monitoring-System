@@ -679,16 +679,10 @@ function Dashboard() {
 
       try {
 
-        if (
-          showInitialLoader
-        ) {
-
-          setLoading(true);
-
+        if (showInitialLoader) {
+          setLoading(false);
         } else {
-
           setRefreshing(true);
-
         }
 
         setError("");

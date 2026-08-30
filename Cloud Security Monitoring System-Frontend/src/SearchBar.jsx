@@ -108,30 +108,41 @@ export default function SearchBar({
     setShowSuggestions(false);
   };
 
+  const handleSearchFocus = () => {
+    setShowSuggestions(true);
+    // Collapse left sidebar to expand top navbar search space
+    window.dispatchEvent(new CustomEvent("collapse-sidebar"));
+  };
+
   return (
     <div
       style={{
         position: "relative",
         width: "100%",
-        maxWidth: "280px",
+        maxWidth: "480px",
       }}
+      onClick={handleSearchFocus}
     >
       {/* Search Box */}
       <div
         style={{
           display: "flex",
           alignItems: "center",
-          background: "rgba(15, 23, 42, 0.75)",
-          border: "1px solid rgba(255, 255, 255, 0.12)",
+          background: "rgba(15, 23, 42, 0.85)",
+          border: "1px solid rgba(59, 130, 246, 0.3)",
           borderRadius: "30px",
-          padding: "4px 14px",
-          transition: "all 0.2s ease",
+          padding: "5px 16px",
+          transition: "all 0.25s ease",
+          boxShadow: "0 4px 12px rgba(0, 0, 0, 0.25)",
         }}
       >
         <FaSearch
-          onClick={handleSearch}
+          onClick={() => {
+            handleSearch();
+            handleSearchFocus();
+          }}
           style={{
-            color: "#94a3b8",
+            color: "#60a5fa",
             cursor: "pointer",
             fontSize: "14px",
             marginRight: "8px",
@@ -147,7 +158,8 @@ export default function SearchBar({
             setValue(e.target.value);
             setShowSuggestions(true);
           }}
-          onFocus={() => setShowSuggestions(true)}
+          onFocus={handleSearchFocus}
+          onClick={handleSearchFocus}
           onKeyDown={handleKeyDown}
           style={{
             flex: 1,
@@ -156,7 +168,7 @@ export default function SearchBar({
             outline: "none",
             color: "#f8fafc",
             padding: "6px 4px",
-            fontSize: "13px",
+            fontSize: "13.5px",
             minWidth: 0,
           }}
         />
