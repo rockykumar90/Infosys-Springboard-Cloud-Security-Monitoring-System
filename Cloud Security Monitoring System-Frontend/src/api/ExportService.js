@@ -122,7 +122,7 @@ export const exportToPDF = (
         );
 
         pdf.text(
-          `SentinelCore SecureOps | Page ${pageNumber}`,
+          `Cloud Security Monitoring System | Page ${pageNumber}`,
           pageData.settings.margin.left,
           pdf.internal.pageSize.height - 7
         );

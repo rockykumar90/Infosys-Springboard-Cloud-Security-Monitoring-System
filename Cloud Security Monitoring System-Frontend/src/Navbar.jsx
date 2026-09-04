@@ -6,6 +6,7 @@ import {
   FaUserCircle,
   FaSignOutAlt,
   FaCog,
+  FaShieldAlt,
 } from "react-icons/fa";
 
 import { motion } from "framer-motion";
@@ -194,15 +195,15 @@ function Navbar() {
       =============================================== */}
 
       <div className="navbar-left">
-
-        <h2>
-          🛡 SentinelCore SecureOps
-        </h2>
-
-        <p>
-          Enterprise Security Operations Center
-        </p>
-
+        <FaShieldAlt className="navbar-logo-icon" />
+        <div className="navbar-title-container">
+          <h2 className="navbar-brand-title">
+            Cloud Security Monitoring System
+          </h2>
+          <p className="navbar-brand-sub">
+            Enterprise Security Operations Center
+          </p>
+        </div>
       </div>
 
       {/* ==============================================
@@ -299,53 +300,7 @@ function Navbar() {
   )}
 </div>
 
-        {/* ==========================
-            USER PROFILE
-        =========================== */}
 
-        <motion.div
-
-          className="profile"
-
-          whileHover={{
-            scale: 1.03,
-          }}
-
-          onClick={toggleProfile}
-
-        >
-
-          <img
-
-            src={`https://ui-avatars.com/api/?name=${
-              user?.username || "Admin"
-            }&background=2563eb&color=ffffff&bold=true&size=128`}
-
-            alt="Profile"
-
-          />
-
-          <div className="profile-info">
-
-            <h4>
-
-              {user?.username ||
-
-                "Administrator"}
-
-            </h4>
-
-            <p>
-
-              {user?.role ||
-
-                "ADMIN"}
-
-            </p>
-
-          </div>
-
-        </motion.div>
 
       </div>
 

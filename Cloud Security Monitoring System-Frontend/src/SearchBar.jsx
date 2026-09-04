@@ -3,7 +3,7 @@ import { FaSearch, FaTimes } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 
 export default function SearchBar({
-  placeholder = "Search pages...",
+  placeholder = "Search...",
 }) {
   const [value, setValue] = useState("");
   const [showSuggestions, setShowSuggestions] = useState(false);
@@ -54,51 +54,30 @@ export default function SearchBar({
     {
       name: "Profile",
       path: "/profile",
-      keywords: ["profile", "account"],
+      keywords: ["profile", "account", "settings"],
     },
     {
       name: "Settings",
       path: "/settings",
-      keywords: ["setting", "settings", "config"],
+      keywords: ["settings", "config", "configuration"],
     },
   ];
 
   const filteredPages = pages.filter((page) => {
-    const search = value.toLowerCase();
+    const query = value.toLowerCase().trim();
+    if (!query) return false;
 
     return (
-      page.name.toLowerCase().includes(search) ||
-      page.keywords.some((keyword) =>
-        keyword.toLowerCase().includes(search)
-      )
+      page.name.toLowerCase().includes(query) ||
+      page.keywords.some((k) => k.toLowerCase().includes(query))
     );
   });
 
-  const handleSearch = () => {
-    const search = value.trim().toLowerCase();
-
-    if (!search) return;
-
-    const page = pages.find((page) =>
-      page.name.toLowerCase().includes(search) ||
-      page.keywords.some(
-        (keyword) =>
-          keyword.includes(search) || search.includes(keyword)
-      )
-    );
-
-    if (page) {
-      navigate(page.path);
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter" && filteredPages.length > 0) {
+      navigate(filteredPages[0].path);
       setValue("");
       setShowSuggestions(false);
-    } else {
-      alert("No matching page found.");
-    }
-  };
-
-  const handleKeyDown = (e) => {
-    if (e.key === "Enter") {
-      handleSearch();
     }
   };
 
@@ -119,7 +98,7 @@ export default function SearchBar({
       style={{
         position: "relative",
         width: "100%",
-        maxWidth: "480px",
+        maxWidth: "440px",
       }}
       onClick={handleSearchFocus}
     >
@@ -163,12 +142,13 @@ export default function SearchBar({
           onKeyDown={handleKeyDown}
           style={{
             flex: 1,
+            width: "100%",
             background: "transparent",
             border: "none",
             outline: "none",
             color: "#f8fafc",
-            padding: "6px 4px",
-            fontSize: "13.5px",
+            padding: "5px 6px",
+            fontSize: "13px",
             minWidth: 0,
           }}
         />

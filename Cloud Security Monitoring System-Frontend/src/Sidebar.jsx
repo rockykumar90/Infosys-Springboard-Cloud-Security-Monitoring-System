@@ -116,9 +116,8 @@ function Sidebar() {
         {!collapsed && (
           <div>
 
-            <h2>SentinelCore</h2>
-
-            <span>SecureOps</span>
+            <h2>Cloud Security</h2>
+            <span>Monitoring System</span>
 
           </div>
         )}

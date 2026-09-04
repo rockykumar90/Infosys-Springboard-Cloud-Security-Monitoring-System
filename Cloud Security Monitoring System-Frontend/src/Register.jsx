@@ -226,7 +226,7 @@ function Register() {
 
           <FaShieldAlt />
 
-          <h1>SentinelCore</h1>
+          <h1>Cloud Security</h1>
 
         </div>
 

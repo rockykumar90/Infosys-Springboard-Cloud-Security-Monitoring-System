@@ -31,7 +31,7 @@ export default function Chatbot() {
   // Initial welcome message tailored to login state & role
   const getInitialMessage = () => {
     if (isPublicPage) {
-      return "👋 Welcome to SentinelCore SecureOps! I am your Security Operations AI Assistant. Ask me about platform features, architecture, or user roles.";
+      return "👋 Welcome to Cloud Security Monitoring System! I am your Security Operations AI Assistant. Ask me about platform features, architecture, or user roles.";
     }
     if (userRole === "ADMIN") {
       return `👋 Welcome back, Administrator ${user?.username || ""}! You have full ADMIN access to manage assets, users, and security controls.`;

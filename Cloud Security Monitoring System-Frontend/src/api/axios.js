@@ -6,15 +6,22 @@ import axios from "axios";
    AXIOS INSTANCE
 ===================================================== */
 
+const getBaseURL = () => {
+  if (typeof window !== "undefined" && (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1")) {
+    return "http://localhost:8080/api";
+  }
+  return import.meta.env.VITE_API_URL || "http://localhost:8080/api";
+};
+
 const API = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || "https://infosys-springboard-cloud-security.onrender.com/api",
+  baseURL: getBaseURL(),
 
   headers: {
     "Content-Type": "application/json",
     Accept: "application/json",
   },
 
-  timeout: 8000,
+  timeout: 10000,
 });
 
 /* =====================================================
@@ -193,57 +200,20 @@ API.interceptors.response.use(
        backend rejected authentication.
     ================================================= */
 
-    if (status === 401) {
+    if (status === 401 || status === 403) {
       console.warn(
-        "401 Unauthorized - clearing authentication."
+        `${status} Session invalid or expired - clearing authentication.`
       );
 
       localStorage.removeItem("token");
-
-      localStorage.removeItem(
-        "currentUser"
-      );
+      localStorage.removeItem("currentUser");
 
       if (
-        window.location.pathname !==
-        "/login"
+        window.location.pathname !== "/login" &&
+        window.location.pathname !== "/register"
       ) {
-        window.location.href =
-          "/login";
+        window.location.href = "/login";
       }
-    }
-
-    /* =================================================
-       403 - FORBIDDEN
-
-       IMPORTANT:
-       Do NOT remove the JWT here.
-
-       A 403 normally means the backend received the
-       request but authorization was denied.
-    ================================================= */
-
-    if (status === 403) {
-      console.error(
-        "403 Forbidden - authentication may exist, " +
-        "but Spring Security rejected authorization."
-      );
-
-      console.error(
-        "403 RESPONSE BODY:",
-        data
-      );
-
-      console.error(
-        "403 REQUEST URL:",
-        url
-      );
-
-      console.error(
-        "Check JwtAuthenticationFilter, " +
-        "CustomUserDetailsService, authorities, " +
-        "SecurityConfig and @PreAuthorize."
-      );
     }
 
     /* =================================================
